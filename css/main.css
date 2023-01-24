@@ -8,19 +8,38 @@ body {
 
 }
 
-.title {
-    position: center;
+#container {
+    display: grid;
+    background-color: white;
+    border-radius: 5px;
 }
 
-nav {
+.title {
     display: flex;
+    justify-content: center;
+    background-color: red;
+    margin: 10px;
 }
+
+.flagPlaced {
+    background-color: gray;
+}
+
+.topside {
+    display: inline-flex;
+    background-color: blue;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+
 
 .board {
-    display: inline-grid;
+    display: grid;
     padding: 10px;
-    grid-template-columns: repeat(var(--size), 60px);
-    grid-template-rows: repeat(var(--size), 60px);
+    justify-content: center;
+    grid-template-columns: repeat(10, 30px);
+    grid-template-rows: repeat(10, 30px);
 }
 
 .board>* {
@@ -33,3 +52,22 @@ nav {
     border: 2px solid gray;
     user-select: none;
 }
+
+
+
+/* .board>[data-status="unknown"] {
+    background-color: gray;
+    cursor: pointer;
+}
+
+.board>[data-status="mine"] {
+    background-image: url("/img/bomb.png");
+}
+
+.board>[data-status="number"] {
+    background-color: none;
+}
+
+.board>[data-status="flagged"] {
+    background-image: url(/img/flag-removebg-preview.png);
+} */

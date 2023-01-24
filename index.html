@@ -7,42 +7,132 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minesweeper</title>
     <link rel="stylesheet" href="css/main.css">
-    <script defer src="js/main.js"></script>
+    <script defer src="js/main.js" type="module"></script>
 </head>
 
 <body>
-    <h2 class="title">Minesweeper</h2>
+    <div id="container">
+        <h2 class="title">Minesweeper</h2>
 
+        <nav class="topside">
+            <div class="flagPlaced">1</div>
+            <div class="minesLeft">2</div>
+            <div class="startFace">face</div>
+            <div class="timer">clock</div>
+        </nav>
 
-    <nav class="topside">
-        <div class="flagPlaced">1</div>
-        <div class="minesLeft">2</div>
-        <div class="startFace">face</div>
-        <div class="timer">clock</div>
-    </nav>
-    <div class="board">
-        <div id="c1r10">1</div>
-        <div id="c2r10">2</div>
-        <div id="c3r10">3</div>
-        <div id="c4r10">4</div>
-        <div id="c5r10">5</div>
-        <div id="c6r10">6</div>
-        <div id="c7r10">7</div>
-        <div id="c8r10">8</div>
-        <div id="c9r10">9</div>
-        <div id="c10r10">10</div>
+        <div class="board">
+            <div id="c1r10">1</div>
+            <div id="c2r10">2</div>
+            <div id="c3r10">3</div>
+            <div id="c4r10">4</div>
+            <div id="c5r10">5</div>
+            <div id="c6r10">6</div>
+            <div id="c7r10">7</div>
+            <div id="c8r10">8</div>
+            <div id="c9r10">9</div>
+            <div id="c10r10">10</div>
 
-        <div id="c1r9">1</div>
-        <div id="c2r9">2</div>
-        <div id="c3r9">3</div>
-        <div id="c4r9">4</div>
-        <div id="c5r9">5</div>
-        <div id="c6r9">6</div>
-        <div id="c7r9">7</div>
-        <div id="c8r9">8</div>
-        <div id="c9r9">9</div>
-        <div id="c10r10">10</div>
+            <div id="c1r9">1</div>
+            <div id="c2r9">2</div>
+            <div id="c3r9">3</div>
+            <div id="c4r9">4</div>
+            <div id="c5r9">5</div>
+            <div id="c6r9">6</div>
+            <div id="c7r9">7</div>
+            <div id="c8r9">8</div>
+            <div id="c9r9">9</div>
+            <div id="c10r10">10</div>
 
+            <div id="c1r8">1</div>
+            <div id="c2r8">2</div>
+            <div id="c3r8">3</div>
+            <div id="c4r8">4</div>
+            <div id="c5r8">5</div>
+            <div id="c6r8">6</div>
+            <div id="c7r8">7</div>
+            <div id="c8r8">8</div>
+            <div id="c9r8">9</div>
+            <div id="c10r8">10</div>
+
+            <div id="c1r7">1</div>
+            <div id="c2r7">2</div>
+            <div id="c3r7">3</div>
+            <div id="c4r7">4</div>
+            <div id="c5r7">5</div>
+            <div id="c6r7">6</div>
+            <div id="c7r7">7</div>
+            <div id="c8r7">8</div>
+            <div id="c9r7">9</div>
+            <div id="c10r7">10</div>
+
+            <div id="c1r6">1</div>
+            <div id="c2r6">2</div>
+            <div id="c3r6">3</div>
+            <div id="c4r6">4</div>
+            <div id="c5r6">5</div>
+            <div id="c6r6">6</div>
+            <div id="c7r6">7</div>
+            <div id="c8r6">8</div>
+            <div id="c9r6">9</div>
+            <div id="c10r6">10</div>
+
+            <div id="c1r5">1</div>
+            <div id="c2r5">2</div>
+            <div id="c3r5">3</div>
+            <div id="c4r5">4</div>
+            <div id="c5r5">5</div>
+            <div id="c6r5">6</div>
+            <div id="c7r5">7</div>
+            <div id="c8r5">8</div>
+            <div id="c9r5">9</div>
+            <div id="c10r5">10</div>
+
+            <div id="c1r4">1</div>
+            <div id="c2r4">2</div>
+            <div id="c3r4">3</div>
+            <div id="c4r4">4</div>
+            <div id="c5r4">5</div>
+            <div id="c6r4">6</div>
+            <div id="c7r4">7</div>
+            <div id="c8r4">8</div>
+            <div id="c9r4">9</div>
+            <div id="c10r4">10</div>
+
+            <div id="c1r3">1</div>
+            <div id="c2r3">2</div>
+            <div id="c3r3">3</div>
+            <div id="c4r3">4</div>
+            <div id="c5r3">5</div>
+            <div id="c6r3">6</div>
+            <div id="c7r3">7</div>
+            <div id="c8r3">8</div>
+            <div id="c9r3">9</div>
+            <div id="c10r3">10</div>
+
+            <div id="c1r2">1</div>
+            <div id="c2r2">2</div>
+            <div id="c3r2">3</div>
+            <div id="c4r2">4</div>
+            <div id="c5r2">5</div>
+            <div id="c6r2">6</div>
+            <div id="c7r2">7</div>
+            <div id="c8r2">8</div>
+            <div id="c9r2">9</div>
+            <div id="c10r2">10</div>
+
+            <div id="c1r1">1</div>
+            <div id="c2r1">2</div>
+            <div id="c3r1">3</div>
+            <div id="c4r1">4</div>
+            <div id="c5r1">5</div>
+            <div id="c6r1">6</div>
+            <div id="c7r1">7</div>
+            <div id="c8r1">8</div>
+            <div id="c9r1">9</div>
+            <div id="c10r1">10</div>
+
+        </div>
     </div>
 
 
