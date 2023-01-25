@@ -39,7 +39,6 @@ body {
 
 .topside {
     display: inline-flex;
-    background-color: blue;
     align-items: center;
     justify-content: space-evenly;
 
@@ -69,4 +68,52 @@ body {
     user-select: none;
 
     font-size: 25px;
+}
+
+.tileClicked {
+    background-color: darkgray;
+}
+
+
+
+/* Color for numbers of adjacent bombs*/
+.One {
+    color: blue
+}
+
+.Two {
+    color: green;
+}
+
+.Three {
+    color: red;
+}
+
+.Four {
+    color: orange;
+}
+
+.Five {
+    color: yellow;
+}
+
+.Six {
+    color: purple;
+}
+
+.Seven {
+    color: blueviolet;
+}
+
+.Eight {
+    color: yellowgreen;
+}
+
+.start {
+    width: 200px;
+    height: 100px;
+    margin: 10px;
+
+
+    font-size: 40px;
 }
