@@ -1,6 +1,6 @@
 body {
 
-    background-image: url(../img/wp2951283-windows-xp-basic-wallpaper-hd.jpg);
+    background-image: url("../img/wp2951283-windows-xp-basic-wallpaper-hd.jpg");
 
     height: 100vh;
     background-size: cover;
