@@ -18,6 +18,7 @@ const cols = 10;
 /*----- state variables -----*/
 let board;
 let bombCount;
+let bombsLeft = 15
 let flagCount = 0;
 let winner;
 
@@ -29,19 +30,84 @@ let boardEl = document.getElementById("board")
 
 /*----- event listeners -----*/
 boardEl.addEventListener('click', handleClick)
+
 boardEl.addEventListener('contextmenu', handleRightClick)
+
 restartButton.addEventListener("click", () => {
     window.location.reload();
 });
 
 
+function handleClick(event) {
+    let currTile = board[event.target.id[0]][event.target.id[2]]
+    if (currTile.isFlagged) {
+        currTile.isFlagged = false;
+        flagCount--;
+        if (currTile.isMine) {
+            bombsLeft++;
+            console.log(bombsLeft)
+        }
+        console.log(currTile.isMine)
+    }
+    if (!currTile.isMine && currTile.floodNumber === 0) floodFeature(currTile.row, currTile.col);
+
+    if (!currTile.isMine && currTile.floodNumber > 0) currTile.isRevealed = true;
+
+    if (!currTile.isFlagged && currTile.isMine) {
+        winner = "L"
+        board.forEach(function (rowArr, rowIdx) {
+            rowArr.forEach(function (tile, colIdx) {
+                const tileId = `${rowIdx}-${colIdx}`
+                const tileEl = document.getElementById(tileId)
+                console.log(tileEl)
+                if (tile.isMine) {
+                    tileEl.style.backgroundColor = "green"
+                    tileEl.innerText = "🧨"
+                }
+            })
+        });
+
+    }
+    document.getElementById("flag-placed").innerText = flagCount
+    render()
+
+}
+
+function handleRightClick(event) {
+    event.preventDefault();
+    let currTile = board[event.target.id[0]][event.target.id[2]]
+
+    if (currTile.isFlagged) {
+        currTile.isFlagged = false;
+        flagCount--;
+        if (currTile.isMine) {
+            bombsLeft++;
+            console.log(bombsLeft)
+        }
+        console.log(currTile.isMine)
+    } else if (!currTile.isFlagged && !currTile.isRevealed) {
+        currTile.isFlagged = true;
+        flagCount++;
+        if (currTile.isMine) {
+            bombsLeft--;
+        }
+        console.log(currTile.isMine)
+    }
+
+    if (flagCount === 15 && bombsLeft === 0) {
+        winner = checkWinner(currTile)
+    }
+    document.getElementById("flag-placed").innerText = flagCount
+    // winner = checkWinner(currTile)
+    render()
+}
+
 /*----- functions -----*/
 init();
 
 function init() {
-    // FILL THE DIV WITH NULL ARRAY
     bombCount = 15;
-
+    // FILL THE DIV WITH NULL ARRAY
     board = [
         [null, null, null, null, null, null, null, null, null, null],
         [null, null, null, null, null, null, null, null, null, null],
@@ -109,18 +175,14 @@ function renderBoard() {
         rowArr.forEach(function (tile, colIdx) {
             const tileId = `${rowIdx}-${colIdx}`
             const tileEl = document.getElementById(tileId)
-            // tile.addEventListener("click", handleLeftClick())
             if (tile.isMine) {
-                tileEl.style.backgroundColor = "blue"
-
+                tileEl.style.backgroundColor = "green"
             }
             if (tile.isFlagged) {
                 tileEl.innerText = "📍"
-                console.log(tile)
             }
             if (!tile.isFlagged) {
                 tileEl.innerText = ""
-                console.log(tile)
             }
             if (tile.isRevealed && tile.floodNumber === 0) {
                 tileEl.style.backgroundColor = "lightgrey"
@@ -129,88 +191,23 @@ function renderBoard() {
                 tileEl.innerText = tile.floodNumber;
                 tileEl.style.backgroundColor = "lightgrey"
             }
-
-
-
         })
     });
 }
 
 function renderMessage() {
+    // if (winner === undefined) { console.log("Hi") }
     if (winner === "L") {
         document.getElementById("message").innerHTML = "You Lose"
+        console.log("YOU LOSE")
+
     }
-    if (winner === "W") document.getElementById("message").innerHTML = "You Lose"
-}
+    if (winner === "W") document.getElementById("message").innerHTML = "You Win!!!!!"
 
-function renderControl() {
 
 }
-
-function handleClick(event) {
-    let currTile = board[event.target.id[0]][event.target.id[2]]
-
-    if (!currTile.isMine && currTile.floodNumber === 0) floodFeature(currTile.row, currTile.col);
-
-    if (!currTile.isMine && currTile.floodNumber > 0) currTile.isRevealed = true;
-
-    winner = checkWinner(currTile)
-
-    render()
-}
-
-function checkWinner(currTile) {
-    if (currTile.isMine) return "L"
-    let allRevealed = false
-    let allBombsFlagged = false
-
-
-    board.forEach(function (rowArr, rowIdx) {
-        rowArr.forEach(function (tile, colIdx) {
-            // if all tiles don't have mines && isRevealed === true
-            const tileId = `${rowIdx}-${colIdx}`
-            const tileEl = document.getElementById(tileId)
-
-            // if (tile.isFlagged && tile.isMine) {
-            //     allBombsFlagged = true
-            // }
-            // if all bombs tiles isFlagged
-        });
-    });
-
-
-
-    if (allBombsFlagged) return "W"
-    return null
-};
-
-function handleRightClick(event) {
-    event.preventDefault();
-    let currTile = board[event.target.id[0]][event.target.id[2]]
-
-    if (currTile.isFlagged === false) {
-        currTile.isFlagged = true;
-        flagCount++;
-        document.getElementById("flag-placed").innerText = flagCount
-        render()
-        return;
-    };
-
-    if (currTile.isFlagged === true) {
-        currTile.isFlagged = false;
-        flagCount--;
-        document.getElementById("flag-placed").innerText = flagCount
-        render()
-        return
-    };
-
-    render()
-
-}
-
 
 function floodFeature(row, col) {
-
     if (row < 0 || row > board.length - 1 || col < 0 || col > board.length - 1) return
 
     if (board[row][col].floodNumber > 0) {
@@ -233,44 +230,11 @@ function floodFeature(row, col) {
 };
 
 
+function checkWinner(currTile) {
+    if (currTile.isMine && flagCount !== 15 && bombCount !== 0) {
+        return "L"
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const boardElement = document.querySelector(".board")
-// const tileElement = document.querySelector('board > div')
-
-// function handleLeftClick(event) {
-//     let eventArr = event.target.id.split("")
-//     let row = eventArr[1]
-//     let col = eventArr[3]
-//     if (board[row][col].isFlagged === true) return;
-//     if (board[row][col].isMine === true) {
-//         console.log("boom")
-//     };
-//     if (board[row][col].isMine === false) {
-//         console.log("safe")
-//     };
-// }
-
-// function render() {
-//     board.forEach(function (rowArr) {
-//         rowArr.forEach(function (square) {
-//             square.render()
-//         });
-//     });
-// }
+    if (flagCount === 15 && bombsLeft === 0) return "W"
+    return "null"
+};
