@@ -25,23 +25,22 @@ const cols = 10;
 
 
 /*----- state variables -----*/
-let board;
 let bombCount;
 let bombsLeft = 15
 let flagCount = 0;
 let winner;
-
+let board;
 
 /*----- cached elements  -----*/
 let bombEl = document.getElementById("bomb-Count")
-let restartButton = document.querySelector("button")
 let boardEl = document.getElementById("board")
+let restartButton = document.querySelector("button")
 
 
 /*----- event listeners -----*/
 boardEl.addEventListener('click', handleClick)
 boardEl.addEventListener('contextmenu', handleRightClick)
-restartButton.addEventListener("click", () => window.location.reload());
+restartButton.addEventListener("click", () => init());
 
 
 /*----- functions -----*/
@@ -61,11 +60,19 @@ function init() {
         [null, null, null, null, null, null, null, null, null, null],
         [null, null, null, null, null, null, null, null, null, null]
     ]
+
+
     for (let r = 0; r < board.length; r++) {
         for (let c = 0; c < board[r].length; c++) {
             board[r][c] = new Tile(r, c)
+            document.getElementById(`${r}-${c}`).style.backgroundColor = "rgb(183, 183, 232)"
+            document.getElementById(`${r}-${c}`).innerText = ""
+            winner = null
+            document.getElementById("message").innerHTML = "Good Luck"
         }
     }
+
+
     generateBombs();
     generateFlood();
     render();
@@ -218,7 +225,6 @@ function floodFeature(row, col) {
 };
 
 function checkWinner(currTile) {
-
     if (!currTile.isFlagged && currTile.isMine) { return "L" }
 
     if (currTile.isMine && flagCount !== 15 && bombCount !== 0) {
