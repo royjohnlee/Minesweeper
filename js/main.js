@@ -48,6 +48,7 @@ init();
 
 function init() {
     bombCount = 15;
+    flagCount = 0;
     board = [
         [null, null, null, null, null, null, null, null, null, null],
         [null, null, null, null, null, null, null, null, null, null],
@@ -65,12 +66,20 @@ function init() {
     for (let r = 0; r < board.length; r++) {
         for (let c = 0; c < board[r].length; c++) {
             board[r][c] = new Tile(r, c)
+            board[r][c].isFlagged = false
+
             document.getElementById(`${r}-${c}`).style.backgroundColor = "rgb(183, 183, 232)"
+
             document.getElementById(`${r}-${c}`).innerText = ""
+
             winner = null
+
+            flagCount = 0
+            document.getElementById("flag-placed").innerText = flagCount
             document.getElementById("message").innerHTML = "Good Luck"
         }
     }
+
 
 
     generateBombs();
@@ -134,6 +143,7 @@ function renderBoard() {
                 tileEl.innerText = tile.floodNumber;
                 tileEl.style.color = textColor[floodNumberTile]
                 tileEl.style.backgroundColor = "lightgrey"
+                document.getElementById("flag-placed").innerText = flagCount
             }
         })
     });
