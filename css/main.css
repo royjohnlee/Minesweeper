@@ -3,8 +3,6 @@ body {
     background-image: url(/img/wp2951283-windows-xp-basic-wallpaper-hd.jpg);
 
     height: 100vh;
-
-
     background-size: cover;
 
     font-family: 'Arial Narrow', Arial, sans-serif;
@@ -17,7 +15,6 @@ body {
     display: flex;
     align-items: center;
     flex-direction: column;
-
 
 }
 
@@ -33,6 +30,7 @@ body {
     border-radius: 5px;
     border: 2px;
     border-color: darkgrey;
+
 }
 
 .title {
@@ -46,7 +44,6 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: space-evenly;
-
     font-size: 24px;
 }
 
@@ -65,7 +62,6 @@ body {
     display: flex;
     border: 1px solid gray;
 
-
     display: flex;
     justify-content: center;
     align-items: center;
@@ -79,7 +75,11 @@ body {
     background-color: darkgray;
 }
 
-
+/* .tileismine {
+    background-color: green;
+    background-image: url("img/bomb.png");
+    background-size: cover;
+} */
 
 /* Color for numbers of adjacent bombs*/
 .One {
@@ -116,9 +116,8 @@ body {
 
 .restart {
     width: 200px;
-    height: 100px;
+    height: 90px;
     margin: 10px;
-
 
     font-size: 40px;
 }

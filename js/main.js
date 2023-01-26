@@ -4,13 +4,11 @@ class Tile {
         this.isMine = false;
         this.isRevealed = false;
         this.isFlagged = false;
-        this.adjMineCount = null;
         this.floodNumber = 0;
         this.row = row;
         this.col = col;
     }
 }
-
 const rows = 10;
 const cols = 10;
 
@@ -22,83 +20,71 @@ let bombsLeft = 15
 let flagCount = 0;
 let winner;
 
-/*----- cached elements  -----*/
 
+/*----- cached elements  -----*/
 let bombEl = document.getElementById("bomb-Count")
 let restartButton = document.querySelector("button")
 let boardEl = document.getElementById("board")
 
+
 /*----- event listeners -----*/
 boardEl.addEventListener('click', handleClick)
-
 boardEl.addEventListener('contextmenu', handleRightClick)
-
-restartButton.addEventListener("click", () => {
-    window.location.reload();
-});
+restartButton.addEventListener("click", () => window.location.reload());
 
 
 function handleClick(event) {
     let currTile = board[event.target.id[0]][event.target.id[2]]
+
+    if (winner === "L" || winner === "W") return
     if (currTile.isFlagged) {
-        currTile.isFlagged = false;
-        flagCount--;
-        if (currTile.isMine) {
-            bombsLeft++;
-            console.log(bombsLeft)
-        }
-        console.log(currTile.isMine)
+        return
     }
     if (!currTile.isMine && currTile.floodNumber === 0) floodFeature(currTile.row, currTile.col);
 
     if (!currTile.isMine && currTile.floodNumber > 0) currTile.isRevealed = true;
 
     if (!currTile.isFlagged && currTile.isMine) {
-        winner = "L"
+        winner = checkWinner(currTile)
         board.forEach(function (rowArr, rowIdx) {
             rowArr.forEach(function (tile, colIdx) {
                 const tileId = `${rowIdx}-${colIdx}`
                 const tileEl = document.getElementById(tileId)
-                console.log(tileEl)
                 if (tile.isMine) {
-                    tileEl.style.backgroundColor = "green"
-                    tileEl.innerText = "🧨"
+                    tileEl.innerHTML = "🧨"
                 }
             })
         });
-
     }
+
     document.getElementById("flag-placed").innerText = flagCount
     render()
-
 }
 
 function handleRightClick(event) {
     event.preventDefault();
     let currTile = board[event.target.id[0]][event.target.id[2]]
+    let currTileEl = document.getElementById(`${event.target.id[0]}-${event.target.id[2]}`)
 
+    if (winner === "L" || winner === "W") return
     if (currTile.isFlagged) {
         currTile.isFlagged = false;
         flagCount--;
+        currTileEl.innerText = ""
         if (currTile.isMine) {
             bombsLeft++;
-            console.log(bombsLeft)
         }
-        console.log(currTile.isMine)
     } else if (!currTile.isFlagged && !currTile.isRevealed) {
         currTile.isFlagged = true;
         flagCount++;
         if (currTile.isMine) {
             bombsLeft--;
         }
-        console.log(currTile.isMine)
     }
-
     if (flagCount === 15 && bombsLeft === 0) {
         winner = checkWinner(currTile)
     }
     document.getElementById("flag-placed").innerText = flagCount
-    // winner = checkWinner(currTile)
     render()
 }
 
@@ -107,7 +93,6 @@ init();
 
 function init() {
     bombCount = 15;
-    // FILL THE DIV WITH NULL ARRAY
     board = [
         [null, null, null, null, null, null, null, null, null, null],
         [null, null, null, null, null, null, null, null, null, null],
@@ -120,8 +105,6 @@ function init() {
         [null, null, null, null, null, null, null, null, null, null],
         [null, null, null, null, null, null, null, null, null, null]
     ]
-
-    // GO THROUGH THE ARR AND CREATE A NEW CLASS FOR EACH ROW/COL LOCATION
     for (let r = 0; r < board.length; r++) {
         for (let c = 0; c < board[r].length; c++) {
             board[r][c] = new Tile(r, c)
@@ -131,7 +114,6 @@ function init() {
     generateFlood();
     render();
 }
-
 
 function generateBombs() {
     while (bombCount > 0) {
@@ -143,8 +125,8 @@ function generateBombs() {
         };
     }
 }
+
 function generateFlood() {
-    //iterate board -> rowArr,rowIdx -> tile, colIdx => !tile.isMine
     board.forEach(function (rowArr, rowIdx) {
         rowArr.forEach(function (tile, colIdx) {
             tile.floodNumber += checkAdjTile(rowIdx - 1, colIdx - 1);
@@ -175,15 +157,10 @@ function renderBoard() {
         rowArr.forEach(function (tile, colIdx) {
             const tileId = `${rowIdx}-${colIdx}`
             const tileEl = document.getElementById(tileId)
-            if (tile.isMine) {
-                tileEl.style.backgroundColor = "green"
-            }
             if (tile.isFlagged) {
                 tileEl.innerText = "📍"
             }
-            if (!tile.isFlagged) {
-                tileEl.innerText = ""
-            }
+
             if (tile.isRevealed && tile.floodNumber === 0) {
                 tileEl.style.backgroundColor = "lightgrey"
             }
@@ -196,15 +173,10 @@ function renderBoard() {
 }
 
 function renderMessage() {
-    // if (winner === undefined) { console.log("Hi") }
     if (winner === "L") {
-        document.getElementById("message").innerHTML = "You Lose"
-        console.log("YOU LOSE")
-
+        document.getElementById("message").innerHTML = "You Lose 🤕💥🧨"
     }
-    if (winner === "W") document.getElementById("message").innerHTML = "You Win!!!!!"
-
-
+    if (winner === "W") document.getElementById("message").innerHTML = "You Win!!!!! 🌝"
 }
 
 function floodFeature(row, col) {
@@ -229,8 +201,10 @@ function floodFeature(row, col) {
     return;
 };
 
-
 function checkWinner(currTile) {
+
+    if (!currTile.isFlagged && currTile.isMine) { return "L" }
+
     if (currTile.isMine && flagCount !== 15 && bombCount !== 0) {
         return "L"
     }
