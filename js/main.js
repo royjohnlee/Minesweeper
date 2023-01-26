@@ -18,6 +18,7 @@ const cols = 10;
 /*----- state variables -----*/
 let board;
 let bombCount;
+let flagCount = 0;
 let winner;
 
 /*----- cached elements  -----*/
@@ -28,9 +29,11 @@ let boardEl = document.getElementById("board")
 
 /*----- event listeners -----*/
 boardEl.addEventListener('click', handleClick)
+boardEl.addEventListener('contextmenu', handleRightClick)
 restartButton.addEventListener("click", () => {
     window.location.reload();
 });
+
 
 /*----- functions -----*/
 init();
@@ -65,8 +68,6 @@ function init() {
 
 
 function generateBombs() {
-    document.getElementById("bomb-Count").innerText = bombCount
-
     while (bombCount > 0) {
         let randomRow = Math.floor(Math.random() * rows)
         let randomCol = Math.floor(Math.random() * cols)
@@ -90,22 +91,17 @@ function generateFlood() {
             tile.floodNumber += checkAdjTile(rowIdx + 1, colIdx + 1);
         })
     });
-    console.log(board)
 }
 
 function checkAdjTile(rowIdx, colIdx) {
     if (rowIdx < 0 || colIdx < 0 || rowIdx > board.length - 1 || colIdx > board.length - 1) return 0
-
-
     if (board[rowIdx][colIdx].isMine) return 1
-
     return 0;
 }
 
 function render() {
     renderBoard();
     renderMessage();
-    renderControl();
 }
 
 function renderBoard() {
@@ -116,18 +112,34 @@ function renderBoard() {
             // tile.addEventListener("click", handleLeftClick())
             if (tile.isMine) {
                 tileEl.style.backgroundColor = "blue"
+
             }
             if (tile.isFlagged) {
                 tileEl.innerText = "📍"
+                console.log(tile)
             }
-            // if floodNumber ===0 and isRevealed => tile.style.backgroundColor = "black"
-            // console.log(tileEl, tile)
+            if (!tile.isFlagged) {
+                tileEl.innerText = ""
+                console.log(tile)
+            }
+            if (tile.isRevealed && tile.floodNumber === 0) {
+                tileEl.style.backgroundColor = "lightgrey"
+            }
+            if (tile.isRevealed && tile.floodNumber > 0) {
+                tileEl.innerText = tile.floodNumber;
+                tileEl.style.backgroundColor = "lightgrey"
+            }
+
+
+
         })
     });
 }
 
 function renderMessage() {
-    if (winner === "L") document.getElementById("message").innerHTML = "You Lose"
+    if (winner === "L") {
+        document.getElementById("message").innerHTML = "You Lose"
+    }
     if (winner === "W") document.getElementById("message").innerHTML = "You Lose"
 }
 
@@ -138,7 +150,7 @@ function renderControl() {
 function handleClick(event) {
     let currTile = board[event.target.id[0]][event.target.id[2]]
 
-    if (!currTile.isMine && currTile.floodNumber === 0) floodFeature();
+    if (!currTile.isMine && currTile.floodNumber === 0) floodFeature(currTile.row, currTile.col);
 
     if (!currTile.isMine && currTile.floodNumber > 0) currTile.isRevealed = true;
 
@@ -147,22 +159,77 @@ function handleClick(event) {
     render()
 }
 
-function floodFeature() {
-};
-
 function checkWinner(currTile) {
     if (currTile.isMine) return "L"
     let allRevealed = false
     let allBombsFlagged = false
+
+
     board.forEach(function (rowArr, rowIdx) {
         rowArr.forEach(function (tile, colIdx) {
             // if all tiles don't have mines && isRevealed === true
+            const tileId = `${rowIdx}-${colIdx}`
+            const tileEl = document.getElementById(tileId)
 
+            // if (tile.isFlagged && tile.isMine) {
+            //     allBombsFlagged = true
+            // }
             // if all bombs tiles isFlagged
         });
     });
-    if (allRevealed && allBombsFlagged) return "W"
+
+
+
+    if (allBombsFlagged) return "W"
     return null
+};
+
+function handleRightClick(event) {
+    event.preventDefault();
+    let currTile = board[event.target.id[0]][event.target.id[2]]
+
+    if (currTile.isFlagged === false) {
+        currTile.isFlagged = true;
+        flagCount++;
+        document.getElementById("flag-placed").innerText = flagCount
+        render()
+        return;
+    };
+
+    if (currTile.isFlagged === true) {
+        currTile.isFlagged = false;
+        flagCount--;
+        document.getElementById("flag-placed").innerText = flagCount
+        render()
+        return
+    };
+
+    render()
+
+}
+
+
+function floodFeature(row, col) {
+
+    if (row < 0 || row > board.length - 1 || col < 0 || col > board.length - 1) return
+
+    if (board[row][col].floodNumber > 0) {
+        board[row][col].isRevealed = true
+        return
+    }
+
+    if (board[row][col].floodNumber === 0 && !board[row][col].isRevealed) {
+        board[row][col].isRevealed = true;
+        floodFeature(row - 1, col - 1)
+        floodFeature(row - 1, col)
+        floodFeature(row - 1, col + 1)
+        floodFeature(row, col - 1)
+        floodFeature(row, col + 1)
+        floodFeature(row + 1, col - 1)
+        floodFeature(row + 1, col)
+        floodFeature(row + 1, col + 1)
+    }
+    return;
 };
 
 
