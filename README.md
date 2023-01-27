@@ -33,7 +33,10 @@ However, If you accidentally click a tile is a mine beneath it, the game will be
 ## :camera_flash: Screenshots
 | |**Gameplay**|
 |:------------:|:------------:|
+| | <img src="img/startgamescreen.JPG" width="400">
 | | <img src="img/gameplay.JPG" width="400">
+| | <img src="img/lose.JPG" width="400">
+
 
 ## 👨‍💻 Languages Used
 ![HTML5](https://img.shields.io/badge/-HTML5-05122A?style=flat&logo=html5)
