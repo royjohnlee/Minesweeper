@@ -67,14 +67,11 @@ function init() {
         for (let c = 0; c < board[r].length; c++) {
             board[r][c] = new Tile(r, c)
             board[r][c].isFlagged = false
-
             document.getElementById(`${r}-${c}`).style.backgroundColor = "rgb(183, 183, 232)"
-
             document.getElementById(`${r}-${c}`).innerText = ""
-
             winner = null
-
             flagCount = 0
+            bombsLeft = 15
             document.getElementById("flag-placed").innerText = flagCount
             document.getElementById("message").innerHTML = "Good Luck"
         }
@@ -120,7 +117,6 @@ function checkAdjTile(rowIdx, colIdx) {
 }
 
 
-
 function render() {
     renderBoard();
     renderMessage();
@@ -148,7 +144,6 @@ function renderBoard() {
         })
     });
 }
-
 
 function handleClick(event) {
     let currTile = board[event.target.id[0]][event.target.id[2]]
